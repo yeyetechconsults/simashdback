@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post('/send-email', (req, res) => {
-  const { name, email, message } = req.body;
+  const { name, email, phone, message } = req.body;
 
   const transporter = nodemailer.createTransport({
     host: 'server367.web-hosting.com',
@@ -33,6 +33,7 @@ app.post('/send-email', (req, res) => {
     html: `<h4>You have received a new inquiry:</h4>
            <p><strong>Name:</strong> ${name}</p>
            <p><strong>Email:</strong> ${email}</p>
+           <p><strong>Phone:</strong> ${phone}</p>
            <p><strong>Message:</strong></p>
            <p>${message}</p>`
   };
@@ -49,7 +50,7 @@ app.post('/send-email', (req, res) => {
 });
 
 app.post('/send-verification-email', (req, res) => {
-  const { companyName, contactEmail, certificateType, messageTrust } = req.body;
+  const { companyName, contactEmail, phone, certificateType, messageTrust } = req.body;
 
   const transporter = nodemailer.createTransport({
     host: 'server367.web-hosting.com',
@@ -69,6 +70,7 @@ app.post('/send-verification-email', (req, res) => {
     html: `<h4>You have received a new verification application:</h4>
            <p><strong>Company/Individual Name:</strong> ${companyName}</p>
            <p><strong>Contact Email:</strong> ${contactEmail}</p>
+           <p><strong>Phone:</strong> ${phone}</p>
            <p><strong>Type of Certificate:</strong> ${certificateType}</p>
            <p><strong>Message:</strong></p>
            <p>${messageTrust}</p>`
