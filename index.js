@@ -48,6 +48,43 @@ app.post('/send-email', (req, res) => {
   });
 });
 
+app.post('/send-verification-email', (req, res) => {
+  const { companyName, contactEmail, certificateType, messageTrust } = req.body;
+
+  const transporter = nodemailer.createTransport({
+    host: 'server367.web-hosting.com',
+    port: 465,
+    secure: true,
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS
+    }
+  });
+
+  const mailOptions = {
+    from: `"SIMA Verification Form" <${process.env.EMAIL_USER}>`,
+    to: process.env.EMAIL_USER,
+    replyTo: contactEmail,
+    subject: "NEW VERIFICATION APPLICATION",
+    html: `<h4>You have received a new verification application:</h4>
+           <p><strong>Company/Individual Name:</strong> ${companyName}</p>
+           <p><strong>Contact Email:</strong> ${contactEmail}</p>
+           <p><strong>Type of Certificate:</strong> ${certificateType}</p>
+           <p><strong>Message:</strong></p>
+           <p>${messageTrust}</p>`
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+      res.status(500).json({ message: 'Something went wrong.' });
+    } else {
+      console.log('Email sent: ' + info.response);
+      res.status(200).json({ message: 'Email sent successfully.' });
+    }
+  });
+});
+
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
 });
